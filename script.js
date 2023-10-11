@@ -33,6 +33,9 @@ document.querySelector('#send_button').addEventListener('click', () => {
 
 // display messages
 onSnapshot(query(collection(database, "messages"), orderBy("time", "asc")), data => {
+    const messageArea = document.querySelector('#message_area');
+    const isScrolledToBottom = messageArea.scrollHeight - messageArea.clientHeight <= messageArea.scrollTop + 1;
+
     document.querySelector('#message_area').innerHTML = '';
     data.forEach(message => {
         // send display
@@ -63,6 +66,10 @@ onSnapshot(query(collection(database, "messages"), orderBy("time", "asc")), data
                </div>
                    `;
         };
+        // scroll logic
+        if (isScrolledToBottom) {
+            messageArea.scrollTop = messageArea.scrollHeight - messageArea.clientHeight;
+        }
     });
     document.querySelector("#message_area").scrollIntoView(false);
 });
